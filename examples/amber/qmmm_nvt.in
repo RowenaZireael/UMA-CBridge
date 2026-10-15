@@ -1,0 +1,25 @@
+NVT QM/MM with UMA-CBridge through the ORCA template interface
+&cntrl
+  imin = 0,
+  irest = 1, ntx = 5,
+  nstlim = 100000, dt = 0.0005,
+  ntb = 1, ntp = 0, cut = 8.0,
+  ntt = 3, temp0 = 300.0, gamma_ln = 1.0, ig = -1,
+  ntc = 2, ntf = 2,
+  ntpr = 100, ntwx = 1000, ntwr = 1000,
+  ioutfm = 1, ntxo = 2,
+  ifqnt = 1,
+/
+&qmmm
+  qmmask = ':1',
+  qmcharge = 0, spin = 1,
+  qm_theory = 'EXTERN',
+  qmmm_int = 5,
+  qmshake = 0,
+  qm_ewald = 0, qm_pme = 0,
+/
+&orc
+  use_template = 1,
+  num_threads = 1,
+  dipole = 0,
+/

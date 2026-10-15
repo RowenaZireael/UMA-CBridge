@@ -1,0 +1,5 @@
+! ExtOpt
+%method
+  ProgExt "/absolute/path/UMA-CBridge/wrappers/orca/orca_uma"
+end
+* xyzfile 0 1 water.xyz

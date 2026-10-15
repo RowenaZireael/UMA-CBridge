@@ -1,0 +1,33 @@
+<simulation verbosity="low">
+  <output prefix="methanol">
+    <properties stride="10" filename="out">[step, time{femtosecond}, potential{electronvolt}, kinetic_cv{electronvolt}, temperature{kelvin}]</properties>
+    <trajectory stride="100" filename="centroid.xyz" format="xyz">x_centroid{angstrom}</trajectory>
+    <checkpoint stride="1000" filename="restart" overwrite="True"/>
+  </output>
+  <prng><seed>42</seed></prng>
+  <total_steps>100000</total_steps>
+  <ffsocket name="uma" mode="unix" pbc="False">
+    <address>fastuma</address>
+    <latency>0.0001</latency>
+    <timeout>1800</timeout>
+    <batch_size>32</batch_size>
+  </ffsocket>
+  <system>
+    <initialize nbeads="32">
+      <file mode="xyz" units="angstrom">methanol.xyz</file>
+      <cell mode="abc" units="angstrom">[30, 30, 30]</cell>
+      <velocities mode="thermal" units="kelvin">300</velocities>
+    </initialize>
+    <forces><force forcefield="uma"/></forces>
+    <ensemble><temperature units="kelvin">300</temperature></ensemble>
+    <motion mode="dynamics">
+      <dynamics mode="nvt">
+        <timestep units="femtosecond">0.25</timestep>
+        <thermostat mode="pile_g">
+          <tau units="femtosecond">100</tau>
+          <pile_lambda>1.0</pile_lambda>
+        </thermostat>
+      </dynamics>
+    </motion>
+  </system>
+</simulation>
