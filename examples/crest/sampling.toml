@@ -1,0 +1,8 @@
+input = "pentane.xyz"
+runtype = "imtd-gc"
+threads = 1
+
+[[calculation.level]]
+method = "orca"
+orca_cmd = "/absolute/path/UMA-CBridge/wrappers/crest/orca"
+orca_template = "/absolute/path/UMA-CBridge/examples/crest/orca_template.inp"

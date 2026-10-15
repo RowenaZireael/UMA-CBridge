@@ -21,5 +21,4 @@ NVT QM/MM with UMA-CBridge through the ORCA template interface
 &orc
   use_template = 1,
   num_threads = 1,
-  dipole = 0,
 /
