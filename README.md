@@ -14,7 +14,7 @@ UMA resources: [official website and documentation](https://fair-chem.github.io/
 
 ```text
 UMA_server.py                    Server and i-PI client; the only Python script
-requirements.txt                 Python dependencies
+requirements.txt                 Reference Python dependency versions
 Makefile                         Build all four C clients
 wrappers/
   common/fastuma_protocol.h       Shared socket protocol
@@ -30,22 +30,17 @@ examples/                        Small inputs for each interface
 LICENSE                          MIT license for this project
 ```
 
-## Installation
+## Build the C wrappers
 
-The reference environment is Linux x86-64, Python 3.12, FAIRChem 2.20.0, PyTorch 2.8.0, ASE 3.28.0, and NumPy 2.4.6. A CUDA GPU is used for accelerated inference. The C clients use POSIX sockets and a little-endian wire format.
+Set up your UMA environment by following the [official FAIRChem/UMA documentation](https://facebookresearch.github.io/fairchem/) and obtain a checkpoint from the [official UMA model repository](https://huggingface.co/facebook/UMA). Run `UMA_server.py` in that environment. This project supplies the interfaces and does not include model weights.
 
-From the project root:
+To compile the four C wrappers, use a C11 compiler (GCC or Clang) and `make` on Linux. From the project root, run:
 
 ```bash
-conda create -n fastuma python=3.12
-conda activate fastuma
-python -m pip install -r requirements.txt
 make -B
 ```
 
-Use a PyTorch build compatible with your GPU and driver. Set `DEVICE = "cpu"` at the top of `UMA_server.py` for CPU inference. The included executables were built for Linux x86-64; `make -B` rebuilds them for your machine. `make clean` removes the four executables. The clients require no Python environment.
-
-Obtain a checkpoint such as `uma-s-1p2.pt` from the [official UMA model repository](https://huggingface.co/facebook/UMA), following its access and license terms. Checkpoints are not included here. FAIRChem installation and model documentation are available at [FAIR Chemistry](https://fair-chem.github.io/).
+The included executables were built for Linux x86-64. `make -B` rebuilds all four wrappers for your machine; `make clean` removes them. The C wrappers themselves require no Python environment.
 
 ## Configure and start
 
@@ -66,6 +61,10 @@ To enable queue batching:
 ```bash
 OMP_NUM_THREADS=4 python UMA_server.py --batch
 ```
+
+**Batched inference makes fuller use of the GPU and can significantly improve throughput**, especially when individual structures are small. With `--batch`, the server evaluates multiple ready energy/gradient requests together, so concurrent client jobs can share a GPU efficiently. The supplied i-PI example batches 32 beads through the XML `batch_size` setting; Hessian calculations batch displaced structures separately.
+
+Larger batches also consume more GPU memory. Choose batch sizes for your GPU's available memory and the number of atoms per structure. For wrapper requests, `RAW_BATCH_MAX_SIZE` limits the number of jobs and `RAW_BATCH_MAX_ATOMS` sets the total atom budget. On CUDA out-of-memory errors, the server splits the affected request batch in half and retries. Adjust i-PI batches in the XML and Hessian batches with the `HESSIAN_BATCH_*` settings at the top of the script.
 
 The raw server listens on `127.0.0.1:50423`. Keep this terminal running while a client calculates. Ctrl+C stops the service.
 
@@ -190,26 +189,18 @@ Optional adapter diagnostics: `CREST_ORCA_LOG=/absolute/path/calls.log` records 
 
 In this mode **i-PI is the server and UMA-CBridge is the force client**. i-PI controls integration, masses, thermostat, and ring-polymer springs. UMA-CBridge returns the physical potential, forces, and virial for each independent structure.
 
-Install i-PI separately if needed:
+For i-PI installation, follow the [official i-PI guide](https://docs.ipi-code.org/getting-started.html).
+
+Terminal 1, in your i-PI environment, starting from the project root:
 
 ```bash
-conda create -n fastuma-ipi python=3.12
-conda activate fastuma-ipi
-python -m pip install i-pi==3.3.0
-```
-
-Terminal 1, from the project root:
-
-```bash
-conda activate fastuma-ipi
 cd examples/ipi
 i-pi methanol.xml
 ```
 
-Terminal 2, from the project root, with `MODEL_PATH` configured:
+Terminal 2, in your UMA environment, from the project root with `MODEL_PATH` configured:
 
 ```bash
-conda activate fastuma
 OMP_NUM_THREADS=4 python UMA_server.py --ipi \
   --ipi-unix fastuma --ipi-structure examples/ipi/methanol.xyz \
   --ipi-charge 0 --ipi-multiplicity 1
