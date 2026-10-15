@@ -4,7 +4,7 @@
 
 UMA-CBridge 为 Meta FAIR Chemistry 的 **UMA 机器学习势**提供 Gaussian、ORCA、AMBER、CREST 和 i-PI 接口，用于几何优化、分子动力学和构象采样。
 
-**C wrapper 与常驻 UMA 服务器显著减少接口调用和通信耗时。** 已有接口如 [ORCA_wrapper_UMA](https://github.com/leforesb/ORCA_wrapper_UMA)、[umas](https://github.com/npe1011/umas) 使用 Python wrapper；本项目用编译后的 C 客户端传输二进制数据，省去每次启动 Python 和导入依赖的开销。作者实测显示，重复调用可节省大量时间。
+**C wrapper 与常驻 UMA 服务器显著减少接口调用和通信耗时。** 已有接口如 [ORCA_wrapper_UMA](https://github.com/leforesb/ORCA_wrapper_UMA)、[umas](https://github.com/npe1011/umas) 使用 Python wrapper；本项目用编译后的 C 客户端传输二进制数据，省去每次启动 Python 和导入依赖的开销。作者实测表明相比于 python wrapper 本接口在MD、NEB、构象采样、结构优化等任务中可节省大量时间。
 
 **AMBER 和 CREST 使用 C 编写的伪 ORCA**：冒充 ORCA 接收调用，以 `.engrad` 文件返回 UMA 能量和梯度。Gaussian 和 ORCA 分别使用 External 和 ExtOpt 接口。`UMA_server.py` 加载一次 UMA，通过 FAIRChem 的 `omol` 任务计算，同时提供 i-PI 力客户端。
 
