@@ -1,5 +1,7 @@
 # UMA-CBridge
 
+[中文说明](README_zh.md)
+
 UMA-CBridge connects Meta FAIR Chemistry's **UMA machine-learning potential** to Gaussian, ORCA, AMBER, CREST, and i-PI for geometry optimization, molecular dynamics, and conformational sampling.
 
 **C wrappers and a resident UMA server reduce interface and communication overhead.** Existing interfaces such as [ORCA_wrapper_UMA](https://github.com/leforesb/ORCA_wrapper_UMA) and [umas](https://github.com/npe1011/umas) use Python wrappers. Here, compiled C clients exchange binary data with the server, saving repeated Python startup and import time. The author has measured substantial savings in repeated calls.
@@ -137,5 +139,11 @@ python UMA_server.py --ipi \
 The example is 32-bead NVT at 300 K with a 0.25 fs step and PILE-G thermostat. **Batching is enabled in the XML** with `batch_size=32`; run with `--ipi` alone. Adjust the XML batch size to fit GPU memory; `--ipi-max-batch` sets the client limit (default 32).
 
 `--ipi-structure` supplies elements in the same atom order as i-PI. The example uses a UNIX socket named `fastuma`. For TCP, use XML `mode="inet"` and `--ipi-host HOST`; both sides default to port `65535` when the port is omitted. This is separate from the wrapper server's `PORT`. For periodic systems, enable XML PBC and pass `--ipi-pbc`.
+
+## Citation
+
+If UMA-CBridge contributes to your research, please cite this software:
+
+Yuchen Zhou. [UMA-CBridge](https://github.com/RowenaZireael/UMA-CBridge). Citation metadata: [CITATION.cff](CITATION.cff).
 
 Copyright (c) 2026 Yuchen Zhou ([RowenaZireael](https://github.com/RowenaZireael)). [MIT license](LICENSE).

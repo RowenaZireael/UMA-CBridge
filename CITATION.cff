@@ -1,0 +1,11 @@
+cff-version: 1.2.0
+message: "If UMA-CBridge contributes to your research, please cite this software."
+type: software
+title: UMA-CBridge
+authors:
+  - family-names: Zhou
+    given-names: Yuchen
+    website: "https://github.com/RowenaZireael"
+repository-code: "https://github.com/RowenaZireael/UMA-CBridge"
+url: "https://github.com/RowenaZireael/UMA-CBridge"
+license: MIT
