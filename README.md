@@ -6,7 +6,7 @@ UMA-CBridge connects Meta FAIR Chemistry's **UMA machine-learning potential** to
 
 **C wrappers and a resident UMA server reduce interface and communication overhead.** Existing interfaces such as [ORCA_wrapper_UMA](https://github.com/leforesb/ORCA_wrapper_UMA) and [umas](https://github.com/npe1011/umas) use Python wrappers. Here, compiled C clients exchange binary data with the server, saving repeated Python startup and import time. The author has measured substantial savings in repeated calls.
 
-**AMBER and CREST use fake ORCA executables written in C.** They impersonate ORCA and return UMA energies and gradients as `.engrad` files. Gaussian and ORCA use their External and ExtOpt interfaces. `UMA_server.py` loads UMA once with FAIRChem's `omol` task and also provides the i-PI force client.
+**AMBER and CREST use fake ORCA executables written in C.** They impersonate ORCA and return UMA energies and gradients as `.engrad` files. Gaussian and ORCA use their External and ExtOpt interfaces. 
 
 UMA: [official documentation](https://facebookresearch.github.io/fairchem/) · [source](https://github.com/facebookresearch/fairchem) · [model weights](https://huggingface.co/facebook/UMA). Cite Brandon M. Wood et al., [*UMA: A Family of Universal Models for Atoms*](https://arxiv.org/abs/2506.23971), arXiv:2506.23971 (2025).
 
