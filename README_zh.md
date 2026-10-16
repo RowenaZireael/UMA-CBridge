@@ -13,7 +13,7 @@ UMA：[官方文档](https://facebookresearch.github.io/fairchem/) · [源码](h
 ## 文件与编译
 
 ```text
-UMA_server.py       服务器和 i-PI 客户端
+UMA_server.py       服务器
 wrappers/           Gaussian、ORCA、AMBER、CREST 的 C 源码与可执行文件
 examples/           各接口输入示例
 Makefile            编译四个 C wrapper
