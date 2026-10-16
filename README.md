@@ -13,7 +13,7 @@ UMA: [official documentation](https://facebookresearch.github.io/fairchem/) · [
 ## Files and build
 
 ```text
-UMA_server.py       Server and i-PI client
+UMA_server.py       Server 
 wrappers/           C sources and executables for Gaussian, ORCA, AMBER, CREST
 examples/           Inputs for each interface
 Makefile            Builds the four C wrappers
